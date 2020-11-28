@@ -2,5 +2,11 @@
     <string name="app_name">CourseProject_mshah22</string>
 
     <string name="mainCreateButton">CREATE</string>
+
+
     <string name="commandsIntro">To Begin Please say \n \"Create Reminder\" or\n \"Create Calendar Event\"</string>
+    <string name="reminderStep1">Step 1\nPlease say what you would\n like me to remind you of?</string>
+    <string name="reminderStep2">Step 2\nPlease say the date for this reminder(mm dd yy ex: \"12 23 20\")?</string>
+    <string name="reminderStep3">Step 3\nPlease say the time for this reminder(ex: \"Nine AM\" or "two thiry pm\" )?</string>
+    <string name="reminderStep4">Your reminder is set!\nYou can say \"next\" or \"exit\"</string>
 </resources>
