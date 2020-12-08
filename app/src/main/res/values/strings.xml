@@ -9,4 +9,8 @@
     <string name="reminderStep2">Step 2\nPlease say the date for this reminder(mm dd yy ex: \"12 23 20\")?</string>
     <string name="reminderStep3">Step 3\nPlease say the time for this reminder(ex: \"Nine AM\" or "two thiry pm\" )?</string>
     <string name="reminderStep4">Your reminder is set!\nYou can say \"next\" or \"exit\"</string>
+
+    <string name="calendarStep1">Please say a description of the event</string>
+
+
 </resources>

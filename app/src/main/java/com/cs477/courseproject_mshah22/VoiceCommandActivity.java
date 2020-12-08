@@ -2,8 +2,13 @@ package com.cs477.courseproject_mshah22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +16,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class VoiceCommandActivity extends AppCompatActivity {
@@ -35,6 +41,49 @@ public class VoiceCommandActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voice_command);
         introTextView = (TextView)findViewById(R.id.commandsInstructionView);
         currentStep = 0;
+
+        //addToCalendar();
+    }
+
+    public void addToCalendar()
+    {
+//        long calID = 3;
+//        long startMillis = 0;
+//        long endMillis = 0;
+//        Calendar beginTime = Calendar.getInstance();
+//        beginTime.set(2020, 12, 14, 7, 30);
+//        startMillis = beginTime.getTimeInMillis();
+//        Calendar endTime = Calendar.getInstance();
+//        endTime.set(2020, 12, 15, 8, 45);
+//        endMillis = endTime.getTimeInMillis();
+//
+//
+//        ContentResolver cr = getContentResolver();
+//        ContentValues values = new ContentValues();
+//        values.put(Events.DTSTART, startMillis);
+//        values.put(Events.DTEND, endMillis);
+//        values.put(Events.TITLE, "Jazzercise");
+//        values.put(Events.DESCRIPTION, "Group workout");
+//        values.put(Events.CALENDAR_ID, calID);
+//        values.put(Events.EVENT_TIMEZONE, "America/New_York");
+//        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(2020, 0, 19, 7, 30);
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(2020, 0, 19, 8, 30);
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(Events.TITLE, "Yoga")
+                .putExtra(Events.DESCRIPTION, "Group class")
+                .putExtra(Events.EVENT_LOCATION, "The gym")
+                .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY)
+                .putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com");
+        startActivity(intent);
+
+
     }
 
     // Create an intent that can start the Speech Recognizer activity
@@ -74,6 +123,7 @@ public class VoiceCommandActivity extends AppCompatActivity {
                     introTextView.setText(R.string.reminderStep1);
                 }else if(calendarMode){
                     calendarMode = true;
+                    introTextView.setText(R.string.calendarStep1);
                 }
             }else if(spokenText.equalsIgnoreCase("Exit")){
                 remindersMode = false;
@@ -120,7 +170,7 @@ public class VoiceCommandActivity extends AppCompatActivity {
     }
 
 
-    private class Reminder {
+    private static class Reminder {
 
         private String desc, date, time;
 
@@ -149,6 +199,44 @@ public class VoiceCommandActivity extends AppCompatActivity {
                     "desc='" + desc + '\'' +
                     ", date='" + date + '\'' +
                     ", time='" + time + '\'' +
+                    '}';
+        }
+    }
+
+    private static class CalendarEvent {
+
+        private String eventDescript, startDate, endDate, eventTitle;
+
+        public CalendarEvent(String...args)
+        {
+            this.eventDescript = args[0];
+            this.startDate = args[1];
+            this.endDate = args[2];
+            this.eventTitle = args[3];
+        }
+        public String getEventDescript() {
+            return eventDescript;
+        }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public String getEventTitle() {
+            return eventTitle;
+        }
+
+        @Override
+        public String toString() {
+            return "CalendarEvent{" +
+                    "eventDescript='" + eventDescript + '\'' +
+                    ", startDate='" + startDate + '\'' +
+                    ", endDate='" + endDate + '\'' +
+                    ", eventTitle='" + eventTitle + '\'' +
                     '}';
         }
     }
