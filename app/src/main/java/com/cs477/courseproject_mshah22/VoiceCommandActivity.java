@@ -2,19 +2,15 @@ package com.cs477.courseproject_mshah22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.List;
@@ -23,9 +19,9 @@ public class VoiceCommandActivity extends AppCompatActivity {
     private static final int SPEECH_REQUEST_CODE = 0;
 
     private TextView introTextView;
-    private String reminderDescription;
-    private String reminderDay;
-    private String reminderTime;
+    private String reminderDescription, calendarDescription;
+    private String reminderDay, availability, calendarTitle;
+    private String reminderTime, calendarEventLocation;
     private int currentStep;
     private boolean remindersMode;
     private boolean calendarMode;
@@ -45,29 +41,12 @@ public class VoiceCommandActivity extends AppCompatActivity {
         //addToCalendar();
     }
 
-    public void addToCalendar()
+    public void addToCalendar(CalendarEvent event)
     {
-//        long calID = 3;
-//        long startMillis = 0;
-//        long endMillis = 0;
-//        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(2020, 12, 14, 7, 30);
-//        startMillis = beginTime.getTimeInMillis();
-//        Calendar endTime = Calendar.getInstance();
-//        endTime.set(2020, 12, 15, 8, 45);
-//        endMillis = endTime.getTimeInMillis();
-//
-//
-//        ContentResolver cr = getContentResolver();
-//        ContentValues values = new ContentValues();
-//        values.put(Events.DTSTART, startMillis);
-//        values.put(Events.DTEND, endMillis);
-//        values.put(Events.TITLE, "Jazzercise");
-//        values.put(Events.DESCRIPTION, "Group workout");
-//        values.put(Events.CALENDAR_ID, calID);
-//        values.put(Events.EVENT_TIMEZONE, "America/New_York");
-//        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-
+        int avail = Events.AVAILABILITY_FREE;
+        if(event.getAvailability().equalsIgnoreCase("busy")){
+            avail = Events.AVAILABILITY_BUSY;
+        }
         Calendar beginTime = Calendar.getInstance();
         beginTime.set(2020, 0, 19, 7, 30);
         Calendar endTime = Calendar.getInstance();
@@ -76,11 +55,10 @@ public class VoiceCommandActivity extends AppCompatActivity {
                 .setData(Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
-                .putExtra(Events.TITLE, "Yoga")
-                .putExtra(Events.DESCRIPTION, "Group class")
-                .putExtra(Events.EVENT_LOCATION, "The gym")
-                .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY)
-                .putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com");
+                .putExtra(Events.TITLE, event.getTitle())
+                .putExtra(Events.DESCRIPTION, event.getEventDescript())
+                .putExtra(Events.EVENT_LOCATION, event.getLocation())
+                .putExtra(Events.AVAILABILITY, avail);
         startActivity(intent);
 
 
@@ -106,7 +84,6 @@ public class VoiceCommandActivity extends AppCompatActivity {
             String spokenText = results.get(0);
             System.out.println(spokenText);
 
-            Toast.makeText(getApplicationContext(),spokenText,Toast.LENGTH_SHORT).show();
             if(spokenText.equalsIgnoreCase("Create Reminder")){
                 remindersMode = true;
                 calendarMode = false;
@@ -116,6 +93,7 @@ public class VoiceCommandActivity extends AppCompatActivity {
                 calendarMode = true;
                 remindersMode = false;
                 currentStep++;
+                introTextView.setText(R.string.calendarStep1);
             }else if(spokenText.equalsIgnoreCase("Next")){
                 currentStep = 1;
                 if(remindersMode){
@@ -133,13 +111,17 @@ public class VoiceCommandActivity extends AppCompatActivity {
                 Reminder reminder = new Reminder(reminderDescription,reminderDay,reminderTime);
                 System.out.println(reminder);
 
-            }else {
+            }else if(remindersMode || calendarMode){
                 if (remindersMode) {
                     processReminders(spokenText);
                 }
                 if (calendarMode) {
                     processCalendarEvent(spokenText);
                 }
+            }else{
+                Toast.makeText(getApplicationContext(),"COMMAND NOT RECOGNIZED",
+                        Toast.LENGTH_SHORT).show();
+                System.out.println("Not recognized");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -166,7 +148,34 @@ public class VoiceCommandActivity extends AppCompatActivity {
     }
     private void processCalendarEvent(String input)
     {
+        if(currentStep == 1){
+            introTextView.setText(R.string.calendarStep2);
+            System.out.println("Description: " +input);
+            calendarDescription= input;
+        }else if(currentStep == 2){
+            introTextView.setText(R.string.calendarStep3);
+            calendarTitle = input;
+            System.out.println("Title: " +input);
+        }else if(currentStep == 3){
+            introTextView.setText(R.string.calendarStep4);
+            calendarEventLocation = input;
+            System.out.println("Location: " +input);
+        }else if(currentStep == 4) {
+            availability = input;
+            System.out.println("Availability: " + input);
+            currentStep = 0;
+            introTextView.setText(R.string.commandsIntro);
+            final CalendarEvent event = new CalendarEvent(calendarDescription,calendarTitle,
+                    calendarEventLocation,availability);
+            System.out.println(event.toString());
+            finalizeToCalendar(event);
+        }
+        currentStep++;
+    }
 
+    private void finalizeToCalendar(CalendarEvent event)
+    {
+        addToCalendar(event);
     }
 
 
@@ -205,38 +214,38 @@ public class VoiceCommandActivity extends AppCompatActivity {
 
     private static class CalendarEvent {
 
-        private String eventDescript, startDate, endDate, eventTitle;
+        private String eventDescript, title, location, availability;
 
         public CalendarEvent(String...args)
         {
             this.eventDescript = args[0];
-            this.startDate = args[1];
-            this.endDate = args[2];
-            this.eventTitle = args[3];
+            this.title = args[1];
+            this.location = args[2];
+            this.availability = args[3];
         }
         public String getEventDescript() {
             return eventDescript;
         }
 
-        public String getStartDate() {
-            return startDate;
+        public String getTitle() {
+            return title;
         }
 
-        public String getEndDate() {
-            return endDate;
+        public String getLocation() {
+            return location;
         }
 
-        public String getEventTitle() {
-            return eventTitle;
+        public String getAvailability() {
+            return availability;
         }
 
         @Override
         public String toString() {
             return "CalendarEvent{" +
                     "eventDescript='" + eventDescript + '\'' +
-                    ", startDate='" + startDate + '\'' +
-                    ", endDate='" + endDate + '\'' +
-                    ", eventTitle='" + eventTitle + '\'' +
+                    ", title='" + title + '\'' +
+                    ", location='" + location + '\'' +
+                    ", availability='" + availability + '\'' +
                     '}';
         }
     }
