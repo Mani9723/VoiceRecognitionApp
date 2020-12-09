@@ -4,17 +4,15 @@
     <string name="mainCreateButton">CREATE</string>
 
 
-    <string name="commandsIntro">To Begin Please say \n \"Create Reminder\" or\n \"Create Calendar Event\"</string>
-    <string name="reminderStep1">Step 1\nPlease say what you would\n like me to remind you of?</string>
-    <string name="reminderStep2">Step 2\nPlease say the date for this reminder(mm dd yy ex: \"12 23 20\")?</string>
-    <string name="reminderStep3">Step 3\nPlease say the time for this reminder(ex: \"Nine AM\" or "two thiry pm\" )?</string>
+    <string name="commandsIntro">To Begin Please say \n \"Create Reminder\" or\n \"Create Calendar Event\" \n You can say \"Exit\" at anytime</string>
+    <string name="reminderStep1">What you would\n like me to remind you of?</string>
     <string name="reminderStep4">Your reminder is set!\nYou can say \"next\" or \"exit\"</string>
 
     <string name="calendarStep1">Please say a description of the event</string>
     <string name="calendarStep2">Please say a title of this event</string>
     <string name="calendarStep3">Where is this event taking place?</string>
     <string name="calendarStep4">Will you be \"free\" or \"busy\"?</string>
-    <string name="calendarStep5">Let\'s finalize your event</string>
+
 
 
 </resources>
