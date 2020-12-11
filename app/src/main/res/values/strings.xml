@@ -2,16 +2,20 @@
     <string name="app_name">CourseProject_mshah22</string>
 
     <string name="mainCreateButton">CREATE</string>
+    <string name="splashScreenIntro">WELCOME TO VOICE ACTIVATED REMINDERS/CALENDAR APP</string>
 
 
     <string name="commandsIntro">To Begin Please say \n \"Create Reminder\" or\n \"Create Calendar Event\" \n You can say \"Exit\" at anytime</string>
     <string name="reminderStep1">What you would\n like me to remind you of?</string>
+    <string name="reminderConfirm">Did you say the following? </string>
+    <string name="reminderRepeat">Please say it again clearly</string>
     <string name="reminderStep4">Your reminder is set!\nYou can say \"next\" or \"exit\"</string>
 
-    <string name="calendarStep1">Please say a description of the event</string>
-    <string name="calendarStep2">Please say a title of this event</string>
+    <string name="calendarStep2">Please say a description of the event</string>
+    <string name="calendarStep1">Please say a title of this event</string>
     <string name="calendarStep3">Where is this event taking place?</string>
-    <string name="calendarStep4">Will you be \"free\" or \"busy\"?</string>
+    <string name="calendarStep4">Is it an all-day event?</string>
+    <string name="calendarStep5">Will you be \"free\" or \"busy\"?</string>
 
 
 
