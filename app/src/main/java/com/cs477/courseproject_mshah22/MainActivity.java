@@ -28,10 +28,4 @@ public class MainActivity extends AppCompatActivity {
         },3000);
     }
 
-
-//    public void createButtonOnClicked(View view) {
-//        Intent intent = new Intent(this,VoiceCommandActivity.class);
-//        startActivity(intent);
-//
-//    }
 }

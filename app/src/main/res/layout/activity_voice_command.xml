@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@android:color/holo_blue_bright"
     tools:context=".VoiceCommandActivity">
 
     <ImageButton
@@ -12,7 +12,7 @@
         android:layout_width="130dp"
         android:layout_height="136dp"
         android:layout_marginBottom="204dp"
-        android:backgroundTint="#FF03DAC5"
+        android:backgroundTint="@android:color/holo_blue_bright"
         android:elevation="10dp"
         android:onClick="displaySpeechRecognizer"
         android:scaleType="fitCenter"
@@ -36,7 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
